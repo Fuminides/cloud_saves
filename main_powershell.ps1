@@ -1,0 +1,1 @@
+python ./my_saves_gog/main.py $1 $2 $3

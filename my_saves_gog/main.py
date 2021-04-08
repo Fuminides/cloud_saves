@@ -5,11 +5,12 @@ javierfumanalidocin at gmail dot com
 Module comprising the save file comparison.
 '''
 import os
-import time
+import sys
 import shutil
 import datetime
 import pathlib
 
+import persistence
 
 NOT_FOUND_CODE = -1
 
@@ -72,12 +73,22 @@ def sync_folder(folder1, folder2):
     update_folder(folder2, folder1)
 
 def sync_games():
-    import persistence
-
     profiles = persistence.load_games()
 
     for k, folders in profiles.items():
         sync_folder(folders[0], folders[1])
 
 if __name__ == '__main__':
-    sync_games()
+    try:
+        command = sys.argv[1]
+    except IndexError:
+        command = None
+
+    try:
+        game, f1, f2 = sys.argv[2:]
+    except ValueError:
+        game = None
+    if command is None:
+        sync_games()
+    else:
+        persistence.add_game(game, f1, f2)
